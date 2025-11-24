@@ -88,7 +88,36 @@ type WhileStatement struct {
 
 func (ws *WhileStatement) statementNode() {}
 func (ws *WhileStatement) String() string {
-	return fmt.Sprintf("WHILE (%s) %s END WHILE", ws.Condition.String(), ws.Body.String())
+	return fmt.Sprintf("WHILE (%s) DO %s END WHILE", ws.Condition.String(), ws.Body.String())
+}
+
+// ForStatement représente une boucle 'for'.
+type ForStatement struct {
+	InitStatement Statement
+	Condition     Expression
+	Body          *BlockStatement
+	LastStatement Statement
+}
+
+func (fs *ForStatement) statementNode() {}
+func (fs *ForStatement) String() string {
+	return fmt.Sprintf("FOR %s; %s; %s DO %s END FOR",
+		fs.InitStatement.String(), fs.Condition.String(),
+		fs.Body.String(), fs.LastStatement.String())
+}
+
+// ForStatement représente une boucle 'for each'.
+type ForEachStatement struct {
+	variable  *Identifier
+	Condition Expression
+	Body      *BlockStatement
+}
+
+func (fes *ForEachStatement) statementNode() {}
+func (fes *ForEachStatement) String() string {
+	return fmt.Sprintf("FOR EACH %s IN (%s) DO %s END FOR",
+		fes.variable.String(), fes.Condition.String(),
+		fes.Body.String())
 }
 
 // FunctionDeclaration représente la déclaration d'une fonction.
