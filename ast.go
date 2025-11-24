@@ -131,9 +131,9 @@ func (fd *FunctionDeclaration) statementNode() {}
 func (fd *FunctionDeclaration) String() string {
 	params := make([]string, len(fd.Parameters))
 	for i, p := range fd.Parameters {
-		params[i] = p.String()
+		params[i] = p.String() + " " + p.Type.String()
 	}
-	return fmt.Sprintf("FUNCTION %s(%s) %s END FUNCTION", fd.Name.String(), join(params, ", "), fd.Body.String())
+	return fmt.Sprintf("FUNCTION %s (%s) %s BEGIN %s END FUNCTION", fd.Name.Value, join(params, ", "), fd.Name.Type.String(), fd.Body.String())
 }
 
 // ReturnStatement représente l'instruction 'return'.
@@ -151,10 +151,56 @@ func (rs *ReturnStatement) String() string {
 // Identifier représente un nom (variable, nom de fonction).
 type Identifier struct {
 	Value string
+	Type  *Type_name
 }
 
-func (i *Identifier) expressionNode() {}
-func (i *Identifier) String() string  { return i.Value }
+func (id *Identifier) expressionNode() {}
+func (id *Identifier) String() string {
+	// return strconv.FormatInt(il.Value, 10)
+	return id.Value
+}
+
+// Type_name représente un type de variable ou de valeur de retour
+// d'une fonction (Number, Boolean, String, Date, Time, ou un record ).
+type Type_name struct {
+	Value  string         //Nom du type
+	Intval *NumberLiteral //Nombre de chiffres de la partie entiere
+	Decval *NumberLiteral //Nombre de chiffres de la partie decimale
+	MinVal *NumberLiteral //Valeur minimale
+	MaxVal *NumberLiteral //Valeur maximale
+}
+
+func (tn *Type_name) expressionNode() {}
+func (tn *Type_name) String() string {
+	str := tn.Value
+	bl := false
+	if len(tn.Intval.Value) > 0 {
+		str += " (" + tn.Intval.Value
+		if len(tn.Decval.Value) > 0 {
+			str += ", " + tn.Decval.Value
+		}
+		bl = true
+	}
+	if len(tn.MinVal.Value) > 0 {
+		switch {
+		case bl:
+			str += ", " + tn.MinVal.Value
+			if len(tn.MaxVal.Value) > 0 {
+				str += ": " + tn.MaxVal.Value
+			}
+		default:
+			bl = true
+			str += " (" + tn.MinVal.Value
+			if len(tn.MaxVal.Value) > 0 {
+				str += ": " + tn.MaxVal.Value
+			}
+		}
+	}
+	if bl {
+		str += ")"
+	}
+	return str
+}
 
 // IntegerLiteral représente un nombre entier.
 type NumberLiteral struct {

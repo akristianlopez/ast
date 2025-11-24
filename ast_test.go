@@ -46,8 +46,12 @@ func TestASTConstruction(t *testing.T) {
 		Name: "Fonction",
 		Statements: []Statement{
 			&FunctionDeclaration{
-				Name:       &Identifier{Value: "fibonacci"},
-				Parameters: []*Identifier{{Value: "n"}},
+				Name: &Identifier{Value: "fibonacci", Type: &Type_name{Value: "Number",
+					Intval: &NumberLiteral{Value: ""}, Decval: &NumberLiteral{Value: ""}, MinVal: &NumberLiteral{Value: ""},
+					MaxVal: &NumberLiteral{Value: ""}}},
+				Parameters: []*Identifier{{Value: "n", Type: &Type_name{Value: "Number",
+					Intval: &NumberLiteral{Value: "10"}, Decval: &NumberLiteral{Value: ""}, MinVal: &NumberLiteral{Value: ""},
+					MaxVal: &NumberLiteral{Value: ""}}}},
 				Body: &BlockStatement{
 					Statements: []Statement{
 						&IfStatement{
