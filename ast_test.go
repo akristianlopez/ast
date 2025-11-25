@@ -1,4 +1,4 @@
-package parsers
+package ast
 
 // main_test.go (pour montrer la construction manuelle de l'AST)
 import (
