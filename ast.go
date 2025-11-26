@@ -6,7 +6,7 @@ type Node interface {
 	// String()
 }
 
-type Program struct {
+type Action struct {
 	Knowledge    StringLiteral
 	Declarations *BlockDclStatement //Statement
 	Start        *StartStatement
@@ -189,8 +189,8 @@ type ArrayLiteral struct {
 }
 
 // Implémentations des méthodes Node
-func (p *Program) Pos() int { return 0 }
-func (p *Program) End() int { return 0 }
+func (p *Action) Pos() int { return 0 }
+func (p *Action) End() int { return 0 }
 
 // func (b BasicType) typeNode() {}
 // func (b BasicType) End() int  { return b.StartPos }
